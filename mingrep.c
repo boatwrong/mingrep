@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 			fgets(line, MAX_BUFF, fp);
 			while(!feof(fp))
 			{
-				printf("%s\n", line);
+				if(strstr(line, expr) != NULL) { printf("%s\n", line); }
 				fgets(line, MAX_BUFF, fp);
 			} 
 
