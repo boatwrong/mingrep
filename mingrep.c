@@ -5,54 +5,74 @@
 
 #define MAX_BUFF 100
 
+int globCompare(char* str);
 void usage();
 
-int main(int argc, char *argv[]) {
-	if(argc < 3) {
-//		usage();
+int main(int argc, char *argv[]) 
+{
+	if(argc < 3) 
+	{
+		// error message
+		fprintf(stderr, "Usage: not enough args\n");
+		return 1;
 	}
+	
 
-	int len;
-	char* expr = (char*)NULL;
-	char* ogDir = malloc(MAX_BUFF * sizeof(char*));
-	char* dir = malloc(MAX_BUFF * sizeof(char*));
-	char* searchPath = malloc(MAX_BUFF * sizeof(char*));
+	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
-	char* parent = "../";
-	getcwd(ogDir,MAX_BUFF);
 
-	printf("%s\n", ogDir);
-	printf("moving to parent directory...\n");
-	path = strcat(parent, ogDir);
-	chdir(path);
-	getcwd(dir, MAX_BUFF);
-	printf("Current directory: %s\n", dir);
-	switch(argc) {
+	switch(argc) 
+	{
 		case(3):
-			printf("base case\n");
-			// base case of searching for expression in file
-			break;
-		case(4):
-			// one flag
-			printf("base case with a flag\n");
+			strcpy(expr,argv[1]);
+			strcpy(path,argv[2]);
+			printf("%s\n", path);
+			if(globCompare(path)) { printf("glob searching\n"); }
+
+			// TODO: this currently needs absolute path, figure
+			//			out a way to get rid of that
+			//
+			FILE* fp = fopen(argv[2], "r");
+			char* line = malloc(MAX_BUFF * sizeof(char*));
+			if(fp == NULL)
+			{
+				perror("ERROR");
+				return 1;
+			}
+			fgets(line, MAX_BUFF, fp);
+			while(!feof(fp))
+			{
+				printf("%s\n", line);
+				fgets(line, MAX_BUFF, fp);
+			} 
+
+			line = (char*)NULL;
+			free(line);
+			fclose(fp);
 			break;
 		default:
-			// more than one flag, extra conditions
 			break;
+
 	}
+	expr = (char*)NULL;
+	free(expr);
+	path = (char*)NULL;
+	free(path);
 	return 0;
-
 }
-
-void search() {
-
-}
-
-
-
-
-
 
 void usage() {
 	fprintf(stderr, "mingrep usage...\n");
+}
+
+int globCompare(char* str)
+{
+	for(int i=strlen(str); i > 0; i--)
+	{
+		if(str[i] == '*')
+		{
+			return 1;
+		}
+	}
+	return 0;
 }

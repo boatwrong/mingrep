@@ -2,3 +2,4 @@ a.out
 makefile
 *.o
 *.h
+input.txt
