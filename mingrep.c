@@ -26,12 +26,8 @@ int main(int argc, char *argv[])
 		case(3):
 			strcpy(expr,argv[1]);
 			strcpy(path,argv[2]);
-			printf("%s\n", path);
 			if(globCompare(path)) { printf("glob searching\n"); }
 
-			// TODO: this currently needs absolute path, figure
-			//			out a way to get rid of that
-			//
 			FILE* fp = fopen(argv[2], "r");
 			char* line = malloc(MAX_BUFF * sizeof(char*));
 			if(fp == NULL)
@@ -40,9 +36,15 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 			fgets(line, MAX_BUFF, fp);
+			int index=0;
 			while(!feof(fp))
 			{
-				if(strstr(line, expr) != NULL) { printf("%s\n", line); }
+				index++;
+				if(strstr(line, expr) != NULL) 
+				{
+					printf("%s - line %d:  ", path, index);
+					printf("%s\n", line);
+				}
 				fgets(line, MAX_BUFF, fp);
 			} 
 
