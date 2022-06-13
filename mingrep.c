@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 			strcpy(path,argv[2]);
 			if(globCompare(path)) { printf("glob searching\n"); }
 
+			// TODO:
+			//		have not tested for absolute paths to other direcories
 			FILE* fp = fopen(argv[2], "r");
 			char* line = malloc(MAX_BUFF * sizeof(char*));
 			if(fp == NULL)
