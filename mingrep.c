@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<sys/stat.h>
 #include<stdlib.h>
 #include<unistd.h>
 #include<string.h>
@@ -8,6 +9,8 @@
 void fileSearch(char* path, char* expr);
 int globCompare(char* str);
 void usage();
+
+
 
 int main(int argc, char *argv[]) 
 {
@@ -21,6 +24,13 @@ int main(int argc, char *argv[])
 
 	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
+	struct stat buf;
+	int status;
+	status = stat(argv[2], &buf);
+	printf("stat function returned: %d\n", status);
+//	https://linux.die.net/man/3/stat
+//	TODO: Look back at this for reference about filetype
+
 
 	switch(argc) 
 	{
@@ -59,9 +69,6 @@ int globCompare(char* str)
 
 void fileSearch(char* path, char* expr) 
 {
-
-			// TODO:
-			//		have not tested for absolute paths to other direcories
 			FILE* fp = fopen(path, "r");
 			char* line = malloc(MAX_BUFF * sizeof(char*));
 			if(fp == NULL)
@@ -80,7 +87,6 @@ void fileSearch(char* path, char* expr)
 				}
 				fgets(line, MAX_BUFF, fp);
 			} 
-
 			line = (char*)NULL;
 			free(line);
 			fclose(fp);
