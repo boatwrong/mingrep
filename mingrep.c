@@ -5,6 +5,7 @@
 
 #define MAX_BUFF 100
 
+void fileSearch(char* path, char* expr);
 int globCompare(char* str);
 void usage();
 
@@ -27,32 +28,7 @@ int main(int argc, char *argv[])
 			strcpy(expr,argv[1]);
 			strcpy(path,argv[2]);
 			if(globCompare(path)) { printf("glob searching\n"); }
-
-			// TODO:
-			//		have not tested for absolute paths to other direcories
-			FILE* fp = fopen(argv[2], "r");
-			char* line = malloc(MAX_BUFF * sizeof(char*));
-			if(fp == NULL)
-			{
-				perror("ERROR");
-				return 1;
-			}
-			fgets(line, MAX_BUFF, fp);
-			int index=0;
-			while(!feof(fp))
-			{
-				index++;
-				if(strstr(line, expr) != NULL) 
-				{
-					printf("%s - line %d:  ", path, index);
-					printf("%s\n", line);
-				}
-				fgets(line, MAX_BUFF, fp);
-			} 
-
-			line = (char*)NULL;
-			free(line);
-			fclose(fp);
+			fileSearch(argv[2], argv[1]);
 			break;
 		default:
 			break;
@@ -79,4 +55,33 @@ int globCompare(char* str)
 		}
 	}
 	return 0;
+}
+
+void fileSearch(char* path, char* expr) 
+{
+
+			// TODO:
+			//		have not tested for absolute paths to other direcories
+			FILE* fp = fopen(path, "r");
+			char* line = malloc(MAX_BUFF * sizeof(char*));
+			if(fp == NULL)
+			{
+				perror("ERROR, file not found");
+			}
+			fgets(line, MAX_BUFF, fp);
+			int index=0;
+			while(!feof(fp))
+			{
+				index++;
+				if(strstr(line, expr) != NULL) 
+				{
+					printf("%s - line %d:  ", path, index);
+					printf("%s\n", line);
+				}
+				fgets(line, MAX_BUFF, fp);
+			} 
+
+			line = (char*)NULL;
+			free(line);
+			fclose(fp);
 }
