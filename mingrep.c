@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<dirent.h>
 #include<sys/stat.h>
 #include<stdlib.h>
 #include<unistd.h>
@@ -6,6 +7,7 @@
 
 #define MAX_BUFF 100
 
+void globSearch();
 void fileSearch(char* path, char* expr);
 int globCompare(char* str);
 void usage();
@@ -27,7 +29,6 @@ int main(int argc, char *argv[])
 	struct stat buf;
 	int status;
 	status = stat(argv[2], &buf);
-	printf("stat function returned: %d\n", status);
 //	https://linux.die.net/man/3/stat
 //	TODO: Look back at this for reference about filetype
 
@@ -37,8 +38,16 @@ int main(int argc, char *argv[])
 		case(3):
 			strcpy(expr,argv[1]);
 			strcpy(path,argv[2]);
-			if(globCompare(path)) { printf("glob searching\n"); }
-			fileSearch(argv[2], argv[1]);
+			char* cwd = malloc(MAX_BUFF * sizeof(char*));
+			if(globCompare(path)) 
+			{
+				globSearch();
+			}
+
+			else
+			{
+				fileSearch(argv[2], argv[1]);
+			}
 			break;
 		default:
 			break;
@@ -90,4 +99,15 @@ void fileSearch(char* path, char* expr)
 			line = (char*)NULL;
 			free(line);
 			fclose(fp);
+}
+
+void globSearch()
+{
+	DIR *dir = opendir("..");
+	struct dirent *de;
+	do 
+	{
+		de = readdir(dir); 
+		printf("%s\n", de->d_name);
+	} while(de != NULL);
 }
