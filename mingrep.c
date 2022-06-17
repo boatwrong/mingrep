@@ -7,6 +7,7 @@
 
 #define MAX_BUFF 100
 
+int isFile(char* path);
 void globSearch();
 void fileSearch(char* path, char* expr);
 int globCompare(char* str);
@@ -36,9 +37,10 @@ int main(int argc, char *argv[])
 			strcpy(expr,argv[1]);
 			strcpy(path,argv[2]);
 			char* cwd = malloc(MAX_BUFF * sizeof(char*));
-			if(globCompare(path)) 
+			printf("%d return from isFile",isFile(path));
+			exit(0);
+			if(globCompare(path))
 			{
-				globSearch();
 			}
 
 			else
@@ -100,7 +102,7 @@ void fileSearch(char* path, char* expr)
 
 void globSearch()
 {
-	DIR *dir = opendir("..");
+	DIR *dir = opendir(".");
 	struct dirent *de;
 	struct stat buf;
 	int status;
@@ -112,4 +114,11 @@ void globSearch()
 			printf("%s\n", de->d_name);
 		}
 	} while(de != NULL);
+}
+
+int isFile(char* path)
+{
+	struct stat statPath;
+	stat(path, &statPath);
+	return S_ISREG(statPath.st_mode);
 }
