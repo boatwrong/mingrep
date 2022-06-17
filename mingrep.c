@@ -26,9 +26,6 @@ int main(int argc, char *argv[])
 
 	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
-	struct stat buf;
-	int status;
-	status = stat(argv[2], &buf);
 //	https://linux.die.net/man/3/stat
 //	TODO: Look back at this for reference about filetype
 
@@ -105,9 +102,14 @@ void globSearch()
 {
 	DIR *dir = opendir("..");
 	struct dirent *de;
+	struct stat buf;
+	int status;
 	do 
 	{
 		de = readdir(dir); 
-		printf("%s\n", de->d_name);
+		if(stat(de->d_name, &buf))
+		{
+			printf("%s\n", de->d_name);
+		}
 	} while(de != NULL);
 }
