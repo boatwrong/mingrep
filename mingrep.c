@@ -63,6 +63,7 @@ void usage() {
 	fprintf(stderr, "mingrep usage...\n");
 }
 
+// Check if searching throughout directory
 int globCompare(char* str)
 {
 	for(int i=strlen(str); i > 0; i--)
@@ -75,14 +76,12 @@ int globCompare(char* str)
 	return 0;
 }
 
+// Search through individual file for expression
 void fileSearch(char* path, char* expr) 
 {
 			FILE* fp = fopen(path, "r");
 			char* line = malloc(MAX_BUFF * sizeof(char*));
-			if(fp == NULL)
-			{
-				perror("ERROR, file not found");
-			}
+			if(fp == NULL) { perror("ERROR, file not found"); }
 			fgets(line, MAX_BUFF, fp);
 			int index=0;
 			while(!feof(fp))
@@ -100,9 +99,10 @@ void fileSearch(char* path, char* expr)
 			fclose(fp);
 }
 
-void globSearch()
+// Search through whole directory
+void globSearch(char* path)
 {
-	DIR *dir = opendir(".");
+	DIR *dir = opendir(path);
 	struct dirent *de;
 	struct stat buf;
 	int status;
@@ -116,6 +116,7 @@ void globSearch()
 	} while(de != NULL);
 }
 
+// check if path references a file or directory
 int isFile(char* path)
 {
 	struct stat statPath;
