@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 			{
 				char* newPath = malloc((strlen(path)) * sizeof(char));
 				memcpy(newPath, path, strlen(path)-1);
-				globSearch(newPath);
+				globSearch(newPath, expr);
 			}
 			else
 			{
@@ -94,7 +94,7 @@ void fileSearch(char* path, char* expr)
 }
 
 // Search through whole directory
-void globSearch(char* path)
+void globSearch(char* path, char* expr)
 {
 	DIR *dir = opendir(path);
 	struct dirent *de;
@@ -102,18 +102,15 @@ void globSearch(char* path)
 	int status;
 	// TODO: do i really need to do this or just check if somethign is not
 	//			a file and then skip over it???
-	int idx=0;
-		de = readdir(dir); 
+	de = readdir(dir); 
 	while(de != NULL)
 	{
-		printf("glob search round %d\n", idx);
-		printf("%s\n", de->d_name);
-		idx++;
 		de = readdir(dir); 
-//		if(stat(de->d_name, &buf))
-//		{
-//			printf("%s\n", de->d_name);
-//		}
+		if(isFile(de->d_name))
+		{
+			fileSearch(de->d_name, expr);
+		}
+//		EOF
 	}
 }
 
