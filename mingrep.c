@@ -94,14 +94,16 @@ void fileSearch(char* path, char* expr)
 // Search through whole directory
 void globSearch(char* path)
 {
-	printf("in glob search\n");
 	DIR *dir = opendir(path);
 	struct dirent *de;
 	struct stat buf;
 	int status;
+	// TODO: do i really need to do this or just check if somethign is not
+	//			a file and then skip over it???
 	do 
 	{
 		de = readdir(dir); 
+		printf("in glob search\n");
 		if(stat(de->d_name, &buf))
 		{
 			printf("%s\n", de->d_name);
