@@ -19,30 +19,22 @@ int main(int argc, char *argv[])
 {
 	if(argc < 3) 
 	{
-		// error message
-		fprintf(stderr, "Usage: not enough args\n");
+		usage();
 		return 1;
 	}
-	
-
 	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
 //	https://linux.die.net/man/3/stat
 //	TODO: Look back at this for reference about filetype
-
-
 	switch(argc) 
 	{
 		case(3):
 			strcpy(expr,argv[1]);
 			strcpy(path,argv[2]);
-			char* cwd = malloc(MAX_BUFF * sizeof(char*));
-			printf("%d return from isFile",isFile(path));
-			exit(0);
-			if(globCompare(path))
+			if(globCompare(path) && !isFile(path))
 			{
+				globSearch(path);
 			}
-
 			else
 			{
 				fileSearch(argv[2], argv[1]);
@@ -50,7 +42,6 @@ int main(int argc, char *argv[])
 			break;
 		default:
 			break;
-
 	}
 	expr = (char*)NULL;
 	free(expr);
@@ -59,6 +50,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+// Error message for improper use
 void usage() {
 	fprintf(stderr, "mingrep usage...\n");
 }
