@@ -94,6 +94,7 @@ void fileSearch(char* path, char* expr)
 // Search through whole directory
 void globSearch(char* path)
 {
+	printf("in glob search\n");
 	DIR *dir = opendir(path);
 	struct dirent *de;
 	struct stat buf;
