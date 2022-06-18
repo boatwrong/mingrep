@@ -33,7 +33,9 @@ int main(int argc, char *argv[])
 			strcpy(path,argv[2]);
 			if(globCompare(path) && !isFile(path))
 			{
-				globSearch(path);
+				char* newPath = malloc((strlen(path)) * sizeof(char));
+				memcpy(newPath, path, strlen(path)-1);
+				globSearch(newPath);
 			}
 			else
 			{
@@ -100,15 +102,19 @@ void globSearch(char* path)
 	int status;
 	// TODO: do i really need to do this or just check if somethign is not
 	//			a file and then skip over it???
-	do 
-	{
+	int idx=0;
 		de = readdir(dir); 
-		printf("in glob search\n");
-		if(stat(de->d_name, &buf))
-		{
-			printf("%s\n", de->d_name);
-		}
-	} while(de != NULL);
+	while(de != NULL)
+	{
+		printf("glob search round %d\n", idx);
+		printf("%s\n", de->d_name);
+		idx++;
+		de = readdir(dir); 
+//		if(stat(de->d_name, &buf))
+//		{
+//			printf("%s\n", de->d_name);
+//		}
+	}
 }
 
 // check if path references a file or directory
