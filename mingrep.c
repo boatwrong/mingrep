@@ -37,10 +37,7 @@ int main(int argc, char *argv[])
 				memcpy(newPath, path, strlen(path)-1);
 				globSearch(newPath, expr);
 			}
-			else
-			{
-				fileSearch(argv[2], argv[1]);
-			}
+			else { fileSearch(argv[2], argv[2]); }
 			break;
 		default:
 			break;
@@ -62,10 +59,7 @@ int globCompare(char* str)
 {
 	for(int i=strlen(str); i > 0; i--)
 	{
-		if(str[i] == '*')
-		{
-			return 1;
-		}
+		if(str[i] == '*') { return 1; }
 	}
 	return 0;
 }
@@ -106,10 +100,7 @@ void globSearch(char* path, char* expr)
 	while(de != NULL)
 	{
 		de = readdir(dir); 
-		if(isFile(de->d_name))
-		{
-			fileSearch(de->d_name, expr);
-		}
+		if(isFile(de->d_name)) { fileSearch(de->d_name, expr); }
 //		EOF
 	}
 }
