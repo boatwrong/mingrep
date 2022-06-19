@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 				memcpy(newPath, path, strlen(path)-1);
 				globSearch(newPath, expr);
 			}
-			else { fileSearch(argv[2], argv[2]); }
+			else { fileSearch(path, expr); }
 			break;
 		default:
 			break;
