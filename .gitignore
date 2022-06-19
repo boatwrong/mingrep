@@ -1,5 +1,4 @@
 main
-makefile
 *.o
 *.h
 input.txt
