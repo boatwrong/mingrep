@@ -15,4 +15,4 @@ mingrep: mingrep.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) -r main *.o *.dSYM
+	$(RM) -r main *.o *.dSYM *.DS_Store
