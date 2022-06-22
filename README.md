@@ -1,4 +1,4 @@
-###project for fun 
+### project for fun 
 * recreate grep knowing how it functions
 	* attempt to not cheat and look at source code
 
