@@ -8,5 +8,5 @@ for my own use
 * work out input for flags
 * work out how to search recursively
 	* first need to handle flag input
-
+* make utility files for functions to clean up main
 
