@@ -12,8 +12,7 @@ void globSearch();
 void fileSearch(char* path, char* expr);
 int globCompare(char* str);
 void usage();
-
-
+void recurse(char* path, char* expr);
 
 int main(int argc, char *argv[]) 
 {
@@ -111,4 +110,19 @@ int isFile(char* path)
 	struct stat statPath;
 	stat(path, &statPath);
 	return S_ISREG(statPath.st_mode);
+}
+
+// recursively search
+void recurse(char* path, char* expr)
+{
+	// base case: [path] is a file
+		// check if [path] is a file
+			// file search for [expr]
+			// return
+
+	// recursion case: [path] is a directory
+		// iterate through directory contents
+			// call recurse on each new [path]
+	
+	// return
 }
