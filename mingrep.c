@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
 	}
 	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
+	char* flags = malloc(MAX_BUFF * sizeof(char*));
 //	https://linux.die.net/man/3/stat
 //	TODO: Look back at this for reference about filetype
 	switch(argc) 
@@ -37,6 +38,14 @@ int main(int argc, char *argv[])
 				globSearch(newPath, expr);
 			}
 			else { fileSearch(path, expr); }
+			break;
+		// flags have been used 
+		case(4):
+			if(argc < 4) { usage(); return 1; }
+			strcpy(flags,argv[1]);
+			strcpy(expr,argv[2]);
+			strcpy(path,argv[3]);
+			if(strstr(flags, "-r") != NULL) { recurse(path, expr); }
 			break;
 		default:
 			break;
@@ -91,8 +100,6 @@ void globSearch(char* path, char* expr)
 {
 	DIR *dir = opendir(path);
 	struct dirent *de;
-	struct stat buf;
-	int status;
 	// TODO: do i really need to do this or just check if somethign is not
 	//			a file and then skip over it???
 	de = readdir(dir); 
@@ -116,13 +123,19 @@ int isFile(char* path)
 void recurse(char* path, char* expr)
 {
 	// base case: [path] is a file
-		// check if [path] is a file
-			// file search for [expr]
-			// return
-
+	if(isFile(path)) { fileSearch(path,expr); return; }
 	// recursion case: [path] is a directory
-		// iterate through directory contents
-			// call recurse on each new [path]
-	
-	// return
+	else
+	{
+		DIR *dir = opendir(path);
+		struct dirent *de;
+		// TODO: do i really need to do this or just check if somethign is not
+		//			a file and then skip over it???
+		while((de = readdir(dir)) != NULL)
+		{
+			de = readdir(dir); 
+			if(isFile(de->d_name)) { fileSearch(de->d_name, expr); }
+			else { recurse(de->d_name, expr); }
+		}
+	}
 }
