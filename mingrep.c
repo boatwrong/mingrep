@@ -122,45 +122,22 @@ int isFile(char* path)
 // recursively search
 void recurse(char* path, char* expr)
 {
-	/*
-	char* currDir = ".";
-	char* parentDir = "..";
-	printf("in recursion method\n");
-	// base case: [path] is a file
-	if(isFile(path)) { 
-	}
-	// recursion case: [path] is a directory
-	else
+	//TODO move this file check to first parsing of args and skip
+	//		this function call altogether
+	struct stat buf;
+	stat(path, &buf);
+	if((buf.st_mode & S_IFMT) == S_IFREG)
 	{
-		DIR *dir = opendir(path);
-		struct dirent *de;
-	*/
-		struct stat buf;
-		stat(path, &buf);
-		if((buf.st_mode & S_IFMT) == S_IFREG)
-		{
-			fileSearch(path,expr);
-			return; 
-			printf("is file\n");
-		}
-		else
-		{
-			printf("is directory\n");
-		}
-
-
-		// TODO: do i really need to do this or just check if somethign is not
-		//			a file and then skip over it???
-		/*
-		while((de = readdir(dir)) != NULL)
-		{
-			if(!strcmp(de->d_name, currDir) || !strcmp(de->d_name, parentDir))
-			{
-				continue;
-			}
-			printf("sending path: [%s] to recurse function\n", de->d_name);
-			recurse(de->d_name, expr);
-		}
+		fileSearch(path,expr);
+		return; 
 	}
-		*/
+
+	DIR *dir = opendir(path);
+	struct dirent *de;
+	while((de = readdir(dir)) != NULL)
+	{
+		if(de->d_name[0] == '.') { continue; }
+		printf("sending path: [%s] to recurse function\n", de->d_name);
+		recurse(de->d_name, expr);
+	}
 }
