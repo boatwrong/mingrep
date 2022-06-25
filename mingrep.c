@@ -128,8 +128,6 @@ void recurse(char* path, char* expr)
 	printf("in recursion method\n");
 	// base case: [path] is a file
 	if(isFile(path)) { 
-		fileSearch(path,expr);
-		return; 
 	}
 	// recursion case: [path] is a directory
 	else
@@ -141,6 +139,8 @@ void recurse(char* path, char* expr)
 		stat(path, &buf);
 		if((buf.st_mode & S_IFMT) == S_IFREG)
 		{
+			fileSearch(path,expr);
+			return; 
 			printf("is file\n");
 		}
 		else
