@@ -122,8 +122,15 @@ int isFile(char* path)
 // recursively search
 void recurse(char* path, char* expr)
 {
+	char* currDir = ".";
+	char* parentDir = "..";
+	printf("in recursion method\n");
 	// base case: [path] is a file
-	if(isFile(path)) { fileSearch(path,expr); return; }
+	if(isFile(path)) { 
+		printf("searching file: %s\n", path);
+		fileSearch(path,expr);
+		return; 
+	}
 	// recursion case: [path] is a directory
 	else
 	{
@@ -133,9 +140,12 @@ void recurse(char* path, char* expr)
 		//			a file and then skip over it???
 		while((de = readdir(dir)) != NULL)
 		{
-			de = readdir(dir); 
-			if(isFile(de->d_name)) { fileSearch(de->d_name, expr); }
-			else { recurse(de->d_name, expr); }
+			if(!strcmp(de->d_name, currDir) || !strcmp(de->d_name, parentDir))
+			{
+				continue;
+			}
+			printf("sending path: [%s] to recurse function\n", de->d_name);
+			recurse(de->d_name, expr);
 		}
 	}
 }

@@ -7,6 +7,7 @@ all:$(BIN)
 
 main: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o main
+	$(RM) $(OBJS)
 
 mingrep: mingrep.c
 	$(CC) $(CFLAGS) -c mingrep.c -o mingrep.o
@@ -15,4 +16,4 @@ mingrep: mingrep.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) -r main *.o *.dSYM *.DS_Store
+	$(RM) -r main $(OBJS) *.dSYM *.DS_Store
