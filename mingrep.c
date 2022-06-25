@@ -7,6 +7,7 @@
 
 #define MAX_BUFF 100
 
+void recursed(char* path, char* expr);
 int isFile(char* path);
 void globSearch();
 void fileSearch(char* path, char* expr);
@@ -120,6 +121,35 @@ int isFile(char* path)
 }
 
 // recursively search
+// TODO first version of function testing in function below
+void recursed(char* path, char* expr)
+{
+	printf("\n\nrecurse called for %s\n",path);
+	//TODO move this file check to first parsing of args and skip
+	//		this function call altogether
+	struct stat buf;
+	stat(path, &buf);
+	if((buf.st_mode & S_IFMT) == S_IFREG)
+	{
+		printf("searching file: %s\n", path);
+		fileSearch(path,expr);
+		return; 
+	}
+	printf("not file\n");
+	DIR *dir = opendir(path);
+	struct dirent *de;
+	char* nextPath = malloc(MAX_BUFF * sizeof(char));
+	while((de = readdir(dir)) != NULL)
+	{
+		if(de->d_name[0] == '.') { continue; }
+		printf("looking at: \'%s\'\n", de->d_name);
+		strcpy(nextPath,de->d_name);
+		recurse(de->d_name, expr);
+		printf("through while loop\n");
+	}
+}
+
+// TODO recursion testing function
 void recurse(char* path, char* expr)
 {
 	//TODO move this file check to first parsing of args and skip
@@ -128,6 +158,7 @@ void recurse(char* path, char* expr)
 	stat(path, &buf);
 	if((buf.st_mode & S_IFMT) == S_IFREG)
 	{
+		printf("searching file: %s\n", path);
 		fileSearch(path,expr);
 		return; 
 	}
@@ -136,8 +167,9 @@ void recurse(char* path, char* expr)
 	struct dirent *de;
 	while((de = readdir(dir)) != NULL)
 	{
-		if(de->d_name[0] == '.') { continue; }
-		printf("sending path: [%s] to recurse function\n", de->d_name);
+		if(strstr(de->d_name,".")) {continue;}
+		if(strstr(de->d_name,"..")) {continue;}
+		printf("looking at: \'%s\'\n", de->d_name);
 		recurse(de->d_name, expr);
 	}
 }
