@@ -124,6 +124,7 @@ int isFile(char* path)
 // TODO first version of function testing in function below
 void recursed(char* path, char* expr)
 {
+	//using emacs for editing text
 	printf("\n\nrecurse called for %s\n",path);
 	//TODO move this file check to first parsing of args and skip
 	//		this function call altogether
