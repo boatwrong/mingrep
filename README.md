@@ -10,3 +10,5 @@ for my own use
 	* first need to handle flag input
 * make utility files for functions to clean up main
 
+#### NOTES
+- working out recursion case. getting all the segfaults at the moment
