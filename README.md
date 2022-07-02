@@ -12,3 +12,4 @@ for my own use
 
 #### NOTES
 - working out recursion case. getting all the segfaults at the moment
+	* this may be a path issue! look at the stackoverflow page open in firefox on the imac

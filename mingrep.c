@@ -154,20 +154,6 @@ void recursed(char* path, char* expr)
 // TODO work in here!!!
 void recurse(char* path, char* expr)
 {
-	printf("in recurse function looking at: \'%s\'\n", path);
-	//TODO move this file check to first parsing of args and skip
-	//		this function call altogether
-	//	struct stat buf;
-	//	stat(path, &buf);
-	//	if((buf.st_mode & S_IFMT) == S_IFREG)
-	//	{
-	//		printf("searching file: %s\n", path);
-	//		fileSearch(path,expr);
-	//		return; 
-	//	}
-
-	// moved file check to switch case in main, then have logic
-	//	to look at the directory entry for object type
 	DIR *dir = opendir(path);
 	printf("Directory \'%s\' opened\n", path);
 	struct dirent *de;
@@ -181,8 +167,8 @@ void recurse(char* path, char* expr)
 			fileSearch(de->d_name, expr); 
 		}
 		else {
-//			printf("calling recurse on: \'%s\'\n", de->d_name);
-//			recurse(de->d_name, expr);
+			printf("calling recurse on: \'%s\'\n", de->d_name);
+			recurse(de->d_name, expr);
 		}
 	}
 }
