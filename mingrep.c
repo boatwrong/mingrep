@@ -120,11 +120,9 @@ int isFile(char* path)
 	return S_ISREG(statPath.st_mode);
 }
 
-// recursively search
-// TODO first version of function testing in function below
+// TODO original version of function testing in function below
 void recursed(char* path, char* expr)
 {
-	//using emacs for editing text
 	printf("\n\nrecurse called for %s\n",path);
 	//TODO move this file check to first parsing of args and skip
 	//		this function call altogether
@@ -150,9 +148,12 @@ void recursed(char* path, char* expr)
 	}
 }
 
-// TODO recursion testing function
+// TODO recursion testing function sandbox
+// TODO 
+// TODO work in here!!!
 void recurse(char* path, char* expr)
 {
+	printf("in recurse function looking at: \'%s\'\n", path);
 	//TODO move this file check to first parsing of args and skip
 	//		this function call altogether
 	struct stat buf;
@@ -165,12 +166,46 @@ void recurse(char* path, char* expr)
 	}
 
 	DIR *dir = opendir(path);
+	printf("Directory \'%s\' opened\n", path);
 	struct dirent *de;
 	while((de = readdir(dir)) != NULL)
 	{
-		if(strstr(de->d_name,".")) {continue;}
-		if(strstr(de->d_name,"..")) {continue;}
-		printf("looking at: \'%s\'\n", de->d_name);
+		printf("in while loop analyzing directory \'%s\'\n", de->d_name);
+		if(0 == strcmp(de->d_name,".")) {continue;}
+		if(0 == strcmp(de->d_name,"..")) {continue;}
+		printf("calling recurse on: \'%s\'\n", de->d_name);
 		recurse(de->d_name, expr);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
