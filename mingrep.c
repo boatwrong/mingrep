@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
 	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
 	char* flags = malloc(MAX_BUFF * sizeof(char*));
-//	https://linux.die.net/man/3/stat
-//	TODO: Look back at this for reference about filetype
+	//	https://linux.die.net/man/3/stat
+	//	TODO: Look back at this for reference about filetype
 	switch(argc) 
 	{
 		case(3):
@@ -40,12 +40,13 @@ int main(int argc, char *argv[])
 			}
 			else { fileSearch(path, expr); }
 			break;
-		// flags have been used 
+			// flags have been used 
 		case(4):
 			if(argc < 4) { usage(); return 1; }
 			strcpy(flags,argv[1]);
 			strcpy(expr,argv[2]);
 			strcpy(path,argv[3]);
+			if(isFile(path)) { fileSearch(path, expr); }
 			if(strstr(flags, "-r") != NULL) { recurse(path, expr); }
 			break;
 		default:
@@ -76,24 +77,24 @@ int globCompare(char* str)
 // Search through individual file for expression
 void fileSearch(char* path, char* expr) 
 {
-			FILE* fp = fopen(path, "r");
-			char* line = malloc(MAX_BUFF * sizeof(char*));
-			if(fp == NULL) { perror("ERROR, file not found"); }
-			fgets(line, MAX_BUFF, fp);
-			int index=0;
-			while(!feof(fp))
-			{
-				index++;
-				if(strstr(line, expr) != NULL) 
-				{
-					printf("%s - line %d:  ", path, index);
-					printf("%s\n", line);
-				}
-				fgets(line, MAX_BUFF, fp);
-			} 
-			line = (char*)NULL;
-			free(line);
-			fclose(fp);
+	FILE* fp = fopen(path, "r");
+	char* line = malloc(MAX_BUFF * sizeof(char*));
+	if(fp == NULL) { perror("ERROR, file not found"); }
+	fgets(line, MAX_BUFF, fp);
+	int index=0;
+	while(!feof(fp))
+	{
+		index++;
+		if(strstr(line, expr) != NULL) 
+		{
+			printf("%s - line %d:  ", path, index);
+			printf("%s\n", line);
+		}
+		fgets(line, MAX_BUFF, fp);
+	} 
+	line = (char*)NULL;
+	free(line);
+	fclose(fp);
 }
 
 // Search through whole directory
@@ -108,7 +109,7 @@ void globSearch(char* path, char* expr)
 	{
 		de = readdir(dir); 
 		if(isFile(de->d_name)) { fileSearch(de->d_name, expr); }
-//		EOF
+		//		EOF
 	}
 }
 
@@ -156,15 +157,17 @@ void recurse(char* path, char* expr)
 	printf("in recurse function looking at: \'%s\'\n", path);
 	//TODO move this file check to first parsing of args and skip
 	//		this function call altogether
-	struct stat buf;
-	stat(path, &buf);
-	if((buf.st_mode & S_IFMT) == S_IFREG)
-	{
-		printf("searching file: %s\n", path);
-		fileSearch(path,expr);
-		return; 
-	}
+	//	struct stat buf;
+	//	stat(path, &buf);
+	//	if((buf.st_mode & S_IFMT) == S_IFREG)
+	//	{
+	//		printf("searching file: %s\n", path);
+	//		fileSearch(path,expr);
+	//		return; 
+	//	}
 
+	// moved file check to switch case in main, then have logic
+	//	to look at the directory entry for object type
 	DIR *dir = opendir(path);
 	printf("Directory \'%s\' opened\n", path);
 	struct dirent *de;
@@ -173,8 +176,11 @@ void recurse(char* path, char* expr)
 		printf("in while loop analyzing directory \'%s\'\n", de->d_name);
 		if(0 == strcmp(de->d_name,".")) {continue;}
 		if(0 == strcmp(de->d_name,"..")) {continue;}
-		printf("calling recurse on: \'%s\'\n", de->d_name);
-		recurse(de->d_name, expr);
+		if(de->d_type == DT_REG) { fileSearch(de->d_name, expr); }
+		else {
+			printf("calling recurse on: \'%s\'\n", de->d_name);
+			recurse(de->d_name, expr);
+		}
 	}
 }
 
