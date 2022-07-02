@@ -173,13 +173,16 @@ void recurse(char* path, char* expr)
 	struct dirent *de;
 	while((de = readdir(dir)) != NULL)
 	{
-		printf("in while loop analyzing directory \'%s\'\n", de->d_name);
+		printf("in while loop analyzing  \'%s\'\n", de->d_name);
 		if(0 == strcmp(de->d_name,".")) {continue;}
 		if(0 == strcmp(de->d_name,"..")) {continue;}
-		if(de->d_type == DT_REG) { fileSearch(de->d_name, expr); }
+		if(de->d_type == DT_REG) { 
+			printf("%s is a file\n", de->d_name);
+			fileSearch(de->d_name, expr); 
+		}
 		else {
-			printf("calling recurse on: \'%s\'\n", de->d_name);
-			recurse(de->d_name, expr);
+//			printf("calling recurse on: \'%s\'\n", de->d_name);
+//			recurse(de->d_name, expr);
 		}
 	}
 }
