@@ -3,4 +3,8 @@ main
 *.h
 input.txt
 log.txt
+fileTree.c
+./test
+./temp
 temp/*
+test/*
