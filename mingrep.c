@@ -121,76 +121,13 @@ int isFile(char* path)
 	return S_ISREG(statPath.st_mode);
 }
 
-// TODO original version of function testing in function below
-//void recursed(char* path, char* expr)
-//{
-//	printf("\n\nrecurse called for %s\n",path);
-//	//TODO move this file check to first parsing of args and skip
-//	//		this function call altogether
-//	struct stat buf;
-//	stat(path, &buf);
-//	if((buf.st_mode & S_IFMT) == S_IFREG)
-//	{
-//		printf("searching file: %s\n", path);
-//		fileSearch(path,expr);
-//		return; 
-//	}
-//	printf("not file\n");
-//	DIR *dir = opendir(path);
-//	struct dirent *de;
-//	char* nextPath = malloc(MAX_BUFF * sizeof(char));
-//	while((de = readdir(dir)) != NULL)
-//	{
-//		if(de->d_name[0] == '.') { continue; }
-//		printf("looking at: \'%s\'\n", de->d_name);
-//		strcpy(nextPath,de->d_name);
-//		recurse(de->d_name, expr);
-//		printf("through while loop\n");
-//	}
-//}
-//
-// TODO recursion testing function sandbox
-// TODO 
-// TODO work in here!!!
-// void recurse(char* path, char* expr)
-// {
-// 	DIR *dir;
-// 	printf("Directory \'%s\' opened\n", path);
-// 	struct dirent *de;
-// 	if((dir = opendir(path)) != NULL)
-// 	{
-// 		while((de = readdir(dir)) != NULL)
-// 		{
-// 			printf("in while loop analyzing  \'%s\'\n", de->d_name);
-// 			if(de->d_type == DT_DIR)
-// 			{
-// 				if(0 != strcmp(de->d_name,".") && (0 != strcmp(de->d_name,"..")))
-// 				{
-// 
-// 					printf("calling recurse on: \'%s\'\n", de->d_name);
-// 					recurse(de->d_name, expr);
-// 				}
-// 			}
-// 			else
-// 			{
-// 				fileSearch(de->d_name, expr); 
-// 			}
-// 		}
-// 	}
-// }
-
 void recurse(char* path, char* expr)
 {
-	if(isFile(path))
-	{
-		fileSearch(path, expr);
-		return;
-	}
+	if(isFile(path)) { fileSearch(path, expr); return; }
 
 	char* slashy = "/";
 	char nextPath[MAX_BUFF];
 	DIR* dir;
-	DIR* nextDir;
 	struct dirent *de;
 
 	if((dir=opendir(path)) != NULL)
@@ -202,17 +139,13 @@ void recurse(char* path, char* expr)
 			strcat(nextPath, slashy);
 			strcat(nextPath, de->d_name);
 
-//			if((nextDir=opendir(nextPath)) != NULL)
-//			{
-
-				if(0 != strcmp(de->d_name,".") && (0 != strcmp(de->d_name,"..")) && 0 != strcmp(de->d_name,".git"))
-				{
-					recurse(nextPath, expr);
-				}
-//			}
+			if(0 != strcmp(de->d_name,".") && (0 != strcmp(de->d_name,"..")) && 0 != strcmp(de->d_name,".git"))
+			{
+				recurse(nextPath, expr);
+			}
 		}
 	}
- }
+}
 
 
 
