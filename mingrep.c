@@ -15,6 +15,8 @@ int globCompare(char* str);
 void usage();
 void recurse(char* path, char* expr);
 
+const char* slashy = "/";
+
 int main(int argc, char *argv[]) 
 {
 	if(argc < 3) 
@@ -125,7 +127,6 @@ void recurse(char* path, char* expr)
 {
 	if(isFile(path)) { fileSearch(path, expr); return; }
 
-	char* slashy = "/";
 	char nextPath[MAX_BUFF];
 	DIR* dir;
 	struct dirent *de;

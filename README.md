@@ -5,11 +5,9 @@
 for my own use
 
 ### TODO
-* work out input for flags
-* work out how to search recursively
-	* first need to handle flag input
+* look at more functions of grep
+	- need to make more robust flag input for this to be possible
 * make utility files for functions to clean up main
 
 #### NOTES
-- working out recursion case. getting all the segfaults at the moment
-	* this may be a path issue! look at the stackoverflow page open in firefox on the imac
+
