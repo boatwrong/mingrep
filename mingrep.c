@@ -148,6 +148,10 @@ void recurse(char* path, char* expr)
 	}
 }
 
+void parseFlags()
+{
+	// figure out a way to parse a stream of flags
+}
 
 
 
