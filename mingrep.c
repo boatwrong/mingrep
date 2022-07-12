@@ -17,6 +17,12 @@ void recurse(char* path, char* expr);
 
 const char* slashy = "/";
 
+struct flags {
+	char* flag1;
+	char* flag2;
+	char* flag3;
+};
+
 int main(int argc, char *argv[]) 
 {
 	if(argc < 3) 
@@ -126,20 +132,16 @@ int isFile(char* path)
 void recurse(char* path, char* expr)
 {
 	if(isFile(path)) { fileSearch(path, expr); return; }
-
 	char nextPath[MAX_BUFF];
 	DIR* dir;
 	struct dirent *de;
-
 	if((dir=opendir(path)) != NULL)
 	{
-
 		while((de = readdir(dir)) != NULL)
 		{
 			strcpy(nextPath, path);
 			strcat(nextPath, slashy);
 			strcat(nextPath, de->d_name);
-
 			if(0 != strcmp(de->d_name,".") && (0 != strcmp(de->d_name,"..")) && 0 != strcmp(de->d_name,".git"))
 			{
 				recurse(nextPath, expr);
@@ -148,6 +150,10 @@ void recurse(char* path, char* expr)
 	}
 }
 
+void parseFlag()
+{
+	//TODO: Write function to parse flags and determine next action
+}
 
 
 
