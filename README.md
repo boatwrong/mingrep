@@ -5,8 +5,8 @@
 for my own use
 
 ### TODO
-* look at more functions of grep
-	- need to make more robust flag input for this to be possible
+* Look into the -A flag 
+	- prints 'n' lines after the line where expression was found
 * make utility files for functions to clean up main
 
 #### NOTES
