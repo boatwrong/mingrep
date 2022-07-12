@@ -150,7 +150,11 @@ void recurse(char* path, char* expr)
 	}
 }
 
-void parseFlag()
+void parseFlag(int flagc, char *flagv[])
 {
+	for(int i=0; i<flagc; i++)
+	{
+		fprintf(stdout,"%s\n",flagv[i]);
+	}
 	//TODO: Write function to parse flags and determine next action
 }
