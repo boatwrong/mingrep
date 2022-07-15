@@ -9,6 +9,7 @@
 #define ERROR_EXIT -1
 #define GOOD_EXIT 0
 
+void optionUsage();
 void recursed(char* path, char* expr);
 int isFile(char* path);
 void globSearch();
@@ -19,14 +20,22 @@ void recurse(char* path, char* expr);
 
 const char* slashy = "/";
 
-struct flags {
-	char* flag1;
-	char* flag2;
-	char* flag3;
-};
-
 int main(int argc, char *argv[]) 
 {
+	//TODO consider putting this parsing into a function?
+	int c;
+	while ((c = getopt(argc,argv,"r")) != -1)
+		switch(c)
+		{
+			case 'r':
+				exit(GOOD_EXIT);
+			case '?':
+				optionUsage();
+				exit(ERROR_EXIT);
+			default:
+				//TODO: put the normal function here!
+				exit(ERROR_EXIT);
+		}
 	if(argc < 3) 
 	{
 		usage();
