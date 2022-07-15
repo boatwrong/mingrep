@@ -8,6 +8,6 @@ for my own use
 * Look into the -A flag 
 	- prints 'n' lines after the line where expression was found
 * make utility files for functions to clean up main
-
-#### NOTES
+* expand on getopt usage
+	- starting work on idea of using bools for "flags" to structure flow of search
 
