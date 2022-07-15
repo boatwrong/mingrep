@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<string.h>
+#include<stdbool.h>
 
 #define MAX_BUFF 100
 #define ERROR_EXIT -1
@@ -23,11 +24,13 @@ const char* slashy = "/";
 int main(int argc, char *argv[]) 
 {
 	//TODO consider putting this parsing into a function?
+	bool doRecurse = false;
 	int c;
 	while ((c = getopt(argc,argv,"r")) != -1)
 		switch(c)
 		{
 			case 'r':
+				doRecurse = true;
 				exit(GOOD_EXIT);
 			case '?':
 				optionUsage();
