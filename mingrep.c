@@ -6,6 +6,8 @@
 #include<string.h>
 
 #define MAX_BUFF 100
+#define ERROR_EXIT -1
+#define GOOD_EXIT 0
 
 void recursed(char* path, char* expr);
 int isFile(char* path);
