@@ -164,11 +164,8 @@ void recurse(char* path, char* expr)
 	}
 }
 
-void parseFlag(int flagc, char *flagv[])
+void optionUsage() 
 {
-	for(int i=0; i<flagc; i++)
-	{
-		fprintf(stdout,"%s\n",flagv[i]);
-	}
-	//TODO: Write function to parse flags and determine next action
+	fprintf(stderr,"If youre here, youve put in an illegal flag\n\n");
+	fprintf(stderr,"Current flag options of this program are: r\n");
 }
