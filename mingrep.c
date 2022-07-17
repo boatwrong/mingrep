@@ -25,30 +25,31 @@ int main(int argc, char *argv[])
 {
 	//TODO consider putting this parsing into a function?
 	bool doRecurse = false;
+	bool printNums = false;
 	int c;
-	while ((c = getopt(argc,argv,"r")) != -1)
+	while ((c = getopt(argc,argv,"r")) != -1){
 		switch(c)
 		{
 			case 'r':
 				doRecurse = true;
-				exit(GOOD_EXIT);
-			case '?':
-				optionUsage();
-				exit(ERROR_EXIT);
+				break;
 			default:
-				//TODO: put the normal function here!
-				exit(ERROR_EXIT);
+				optionUsage();
+				usage();
 		}
-	if(argc < 3) 
-	{
-		usage();
-		return 1;
-	}
+	} 
 	char* expr = malloc(MAX_BUFF * sizeof(char*));
 	char* path = malloc(MAX_BUFF * sizeof(char*));
 	char* flags = malloc(MAX_BUFF * sizeof(char*));
+
 	//	https://linux.die.net/man/3/stat
 	//	TODO: Look back at this for reference about filetype
+	//
+	
+	if(doRecurse) { recurse(argv[argc-1],argv[argc-2]); }
+	else{ fileSearch(argv[argc-1],argv[argc-2]); }
+	
+	/*
 	switch(argc) 
 	{
 		case(3):
