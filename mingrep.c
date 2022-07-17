@@ -1,3 +1,4 @@
+// includes/function defs/macros {{{
 #include<stdio.h>
 #include<dirent.h>
 #include<sys/stat.h>
@@ -20,9 +21,17 @@ void usage();
 void recurse(char* path, char* expr);
 
 const char* slashy = "/";
+// }}}
+
+
 
 int main(int argc, char *argv[]) 
 {
+	if(argc < 3) 
+	{
+		usage();
+		return 1;
+	}
 	//TODO consider putting this parsing into a function?
 	bool doRecurse = false;
 	bool printNums = false;
@@ -80,6 +89,7 @@ int main(int argc, char *argv[])
 	path = (char*)NULL;
 	free(path);
 	return 0;
+	*/
 }
 
 // Error message for improper use
