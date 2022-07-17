@@ -4,6 +4,7 @@ main
 input.txt
 log.txt
 fileTree.c
+opTest.c
 ./test
 ./temp
 temp/*
