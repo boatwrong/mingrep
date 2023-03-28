@@ -1,19 +1,15 @@
-CC=gcc
+CC=gcc-12
 CFLAGS=-g -Wall
-OBJS=mingrep.o
-BIN=main
+OBJS=helper.o
+BIN=mingrep
 
-all:$(BIN)
+all: $(BIN)
 
-main: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o main
-	$(RM) $(OBJS)
+%.0: %.c %.h
+	$(CC) $(CFLAGS) -c $^
 
-mingrep: mingrep.c
-	$(CC) $(CFLAGS) -c mingrep.c -o mingrep.o
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+mingrep: helper.o mingrep.c
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	$(RM) -r main $(OBJS) *.dSYM *.DS_Store
+	$(RM) -r mingrep *.o *.dSYM *.DS_Store *.gch
