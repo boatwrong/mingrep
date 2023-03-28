@@ -8,17 +8,20 @@ int main(int argc, char *argv[])
 {
     if (2 == argc)
     {
-        checkSTDIN(argv[1]);
-        return 0;
+        int res = checkSTDIN(argv[1]);
+        if (-3 == res)
+        {
+            return 0;
+        }
+        argsUsage();
+        return 1;
     }
-
     if (3 > argc) 
     {
         argsUsage();
         return 1;
     }
 
-    //TODO consider putting this parsing into a function?
     bool doRecurse = false;
     bool doFileSearch = false;
     int c;
@@ -27,22 +30,19 @@ int main(int argc, char *argv[])
     {
         while ((c = getopt(argc, argv, "rf")) != -1)
         {
-            // getopt handles multiple flags
             switch(c)
             {
                 case 'r':
-                    fprintf(stdout, "doing recursive\n");
                     doRecurse = true;
                     break;
                 case 'f':
-                    fprintf(stdout, "dooing file name search\n");
                     doFileSearch = true;
                     break;
                 default:
                     optionUsage();
                     break;
             }
-        } 
+        }
     }
 
     //	https://linux.die.net/man/3/stat
@@ -51,10 +51,12 @@ int main(int argc, char *argv[])
     if (doRecurse)
     {
         recurse(argv[argc-1], argv[argc-2], doFileSearch);
+        return 0;
     }
-
     else
     {
         fileSearch(argv[argc-1], argv[argc-2], doFileSearch);
+        return 0;
     }
+    return 1;
 }

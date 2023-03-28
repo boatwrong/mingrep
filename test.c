@@ -1,20 +1,27 @@
-#include <stdio.h>
-#include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-int main(int argc, char* argv[])
-{
-    if (!(isatty(fileno(stdin))))
+// test file for debugging specific functionality 
+int main() {
+    FILE *piped; 
+    piped = fopen("/dev/stdin", "r");
+    char* line = malloc(BUFSIZ * sizeof(char*));
+    if (NULL == piped) 
     {
-        FILE *piped;
-        int i = 0;
-        char pipe[65536];
-        while(-1 != (pipe[i++] = getchar()));
-        pipe[i-1] = '\0';
-        pipe[i-2] = '\0';
-        fprintf(piped, "%s", pipe);
-        return 0;
+        perror("ERROR, file not found"); 
     }
-    return 1;
+    fgets(line, BUFSIZ, piped);
+    int index=0;
+    while (!feof(piped))
+    {
+        index++;
+        fprintf(stdout, "%s\n", line);
+        fgets(line, BUFSIZ, piped);
+    }
+    line = (char*)NULL;
+    free(line);
+    fclose(piped);
+    return 0;
 }
+

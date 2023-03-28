@@ -12,14 +12,11 @@ int lastIndexOf(char* str, char* expr, int len)
 {
     for (int i = len-1; i >=0; i--)
     {
-        fprintf(stdout, "comparing '%c' to '%s'\n", str[i], expr);
         if (expr[0] == str[i])
         {
-            fprintf(stdout, "found a match, returning index %d\n", i);
             return i;
         }
     }
-    fprintf(stdout, "did not find a match");
     return -1;
 }
 
@@ -33,7 +30,6 @@ char* getFileName(char* str)
     {
         fileName[i] = str[i + 7];
     }
-    fprintf(stdout, "file name is \"%s\"\n", fileName);
     return NULL;
 }
 
@@ -73,8 +69,8 @@ void search(FILE *fp, char* path, char* expr)
         index++;
         if (strstr(line, expr) != NULL) 
         {
-            printf("%s - line %d:  ", path, index);
-            printf("%s\n", line);
+            fprintf(stdout, "%s - line %d:  ", path, index);
+            fprintf(stdout, "%s", line);
         }
         fgets(line, MAX_BUFF, fp);
     }
@@ -86,7 +82,6 @@ void search(FILE *fp, char* path, char* expr)
 // Search through individual file for expression
 void fileSearch(char* path, char* expr, bool doFileSearch)
 {
-    // only search file name
     if (true == doFileSearch)
     {
         char* fileName = getFileName(path);
@@ -96,31 +91,8 @@ void fileSearch(char* path, char* expr, bool doFileSearch)
         }
     }
 
-
     FILE* fp = fopen(path, "r");
     search(fp, path, expr);
-    // TODO see if abstracting this stuff works.
-    //
-    // char* line = malloc(MAX_BUFF * sizeof(char*));
-    // if (NULL == fp) 
-    // {
-    //     perror("ERROR, file not found"); 
-    // }
-    // fgets(line, MAX_BUFF, fp);
-    // int index=0;
-    // while (!feof(fp))
-    // {
-    //     index++;
-    //     if (strstr(line, expr) != NULL) 
-    //     {
-    //         printf("%s - line %d:  ", path, index);
-    //         printf("%s\n", line);
-    //     }
-    //     fgets(line, MAX_BUFF, fp);
-    // }
-    // line = (char*)NULL;
-    // free(line);
-    // fclose(fp);
 }
 
 // Search through whole directory
@@ -136,11 +108,10 @@ void globSearch(char* path, char* expr, bool doFileSearch)
         de = readdir(dir);
         if (isFile(de->d_name)) {
             fileSearch(de->d_name, expr, doFileSearch);
-        } //		EOF
+        }
     }
 }
 
-// check if path references a file or directory
 int isFile(char* path)
 {
     struct stat statPath;
@@ -178,13 +149,8 @@ int checkSTDIN(char* expr)
     if (!(isatty(fileno(stdin))))
     {
         FILE *piped;
-        int i = 0;
-        char pipe[65536];
-        while(-1 != (pipe[i++] = getchar()));
-        pipe[i-1] = '\0';
-        pipe[i-2] = '\0';
-        fprintf(piped, "%s", pipe);
-        search(piped, "", expr);
+        piped = fopen("/dev/stdin", "r");
+        search(piped, "stdin", expr);
         return -3;
     }
     return 1;
