@@ -8,4 +8,8 @@ opTest.c
 ./temp
 temp/*
 test/*
+<<<<<<< HEAD
 extras/
+=======
+libs/
+>>>>>>> 922f7e41261cfaf9f06d7ccd9b24d01bcb94d92f
