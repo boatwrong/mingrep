@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <unistd.h>
+
 #include "helper.h"
 
 int lastIndexOf(char* str, char* expr, int len)
@@ -57,19 +59,8 @@ int globCompare(char* str)
     return 0;
 }
 
-// Search through individual file for expression
-void fileSearch(char* path, char* expr, bool doFileSearch)
+void search(FILE *fp, char* path, char* expr)
 {
-    // only search file name
-    if (true == doFileSearch)
-    {
-        char* fileName = getFileName(path);
-        if (strstr(fileName, expr) != NULL) 
-        {
-            fprintf(stdout, "%s\n", fileName);
-        }
-    }
-    FILE* fp = fopen(path, "r");
     char* line = malloc(MAX_BUFF * sizeof(char*));
     if (NULL == fp) 
     {
@@ -90,6 +81,46 @@ void fileSearch(char* path, char* expr, bool doFileSearch)
     line = (char*)NULL;
     free(line);
     fclose(fp);
+}
+
+// Search through individual file for expression
+void fileSearch(char* path, char* expr, bool doFileSearch)
+{
+    // only search file name
+    if (true == doFileSearch)
+    {
+        char* fileName = getFileName(path);
+        if (strstr(fileName, expr) != NULL) 
+        {
+            fprintf(stdout, "%s\n", fileName);
+        }
+    }
+
+
+    FILE* fp = fopen(path, "r");
+    search(fp, path, expr);
+    // TODO see if abstracting this stuff works.
+    //
+    // char* line = malloc(MAX_BUFF * sizeof(char*));
+    // if (NULL == fp) 
+    // {
+    //     perror("ERROR, file not found"); 
+    // }
+    // fgets(line, MAX_BUFF, fp);
+    // int index=0;
+    // while (!feof(fp))
+    // {
+    //     index++;
+    //     if (strstr(line, expr) != NULL) 
+    //     {
+    //         printf("%s - line %d:  ", path, index);
+    //         printf("%s\n", line);
+    //     }
+    //     fgets(line, MAX_BUFF, fp);
+    // }
+    // line = (char*)NULL;
+    // free(line);
+    // fclose(fp);
 }
 
 // Search through whole directory
@@ -140,4 +171,21 @@ void recurse(char* path, char* expr, bool doFileSearch)
             }
         }
     }
+}
+
+int checkSTDIN(char* expr)
+{
+    if (!(isatty(fileno(stdin))))
+    {
+        FILE *piped;
+        int i = 0;
+        char pipe[65536];
+        while(-1 != (pipe[i++] = getchar()));
+        pipe[i-1] = '\0';
+        pipe[i-2] = '\0';
+        fprintf(piped, "%s", pipe);
+        search(piped, "", expr);
+        return -3;
+    }
+    return 1;
 }

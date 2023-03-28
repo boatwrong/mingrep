@@ -1,6 +1,5 @@
 main
 *.o
-*.h
 input.txt
 log.txt
 fileTree.c

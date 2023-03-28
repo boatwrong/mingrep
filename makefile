@@ -11,5 +11,8 @@ all: $(BIN)
 mingrep: helper.o mingrep.c
 	$(CC) $(CFLAGS) -o $@ $^
 
+test: test.c
+	$(CC) $(CFLAGS) -o $@ $^
+
 clean:
 	$(RM) -r mingrep *.o *.dSYM *.DS_Store *.gch

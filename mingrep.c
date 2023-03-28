@@ -6,6 +6,12 @@
 
 int main(int argc, char *argv[]) 
 {
+    if (2 == argc)
+    {
+        checkSTDIN(argv[1]);
+        return 0;
+    }
+
     if (3 > argc) 
     {
         argsUsage();
