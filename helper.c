@@ -1,9 +1,39 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <dirent.h>
 #include "helper.h"
+
+int lastIndexOf(char* str, char* expr, int len)
+{
+    for (int i = len-1; i >=0; i--)
+    {
+        fprintf(stdout, "comparing '%c' to '%s'\n", str[i], expr);
+        if (expr[0] == str[i])
+        {
+            fprintf(stdout, "found a match, returning index %d\n", i);
+            return i;
+        }
+    }
+    fprintf(stdout, "did not find a match");
+    return -1;
+}
+
+char* getFileName(char* str)
+{
+    size_t len = strlen(str);
+    int lastSlash = lastIndexOf(str, slashy, len);
+    int fileNameLength = len - lastSlash -1;
+    char* fileName = malloc(fileNameLength);
+    for (int i = 0; i < fileNameLength; i++)
+    {
+        fileName[i] = str[i + 7];
+    }
+    fprintf(stdout, "file name is \"%s\"\n", fileName);
+    return NULL;
+}
 
 void argsUsage()
 {
@@ -28,8 +58,17 @@ int globCompare(char* str)
 }
 
 // Search through individual file for expression
-void fileSearch(char* path, char* expr)
+void fileSearch(char* path, char* expr, bool doFileSearch)
 {
+    // only search file name
+    if (true == doFileSearch)
+    {
+        char* fileName = getFileName(path);
+        if (strstr(fileName, expr) != NULL) 
+        {
+            fprintf(stdout, "%s\n", fileName);
+        }
+    }
     FILE* fp = fopen(path, "r");
     char* line = malloc(MAX_BUFF * sizeof(char*));
     if (NULL == fp) 
@@ -54,7 +93,7 @@ void fileSearch(char* path, char* expr)
 }
 
 // Search through whole directory
-void globSearch(char* path, char* expr)
+void globSearch(char* path, char* expr, bool doFileSearch)
 {
     DIR *dir = opendir(path);
     struct dirent *de;
@@ -65,7 +104,7 @@ void globSearch(char* path, char* expr)
     {
         de = readdir(dir);
         if (isFile(de->d_name)) {
-            fileSearch(de->d_name, expr);
+            fileSearch(de->d_name, expr, doFileSearch);
         } //		EOF
     }
 }
@@ -78,11 +117,11 @@ int isFile(char* path)
     return S_ISREG(statPath.st_mode);
 }
 
-void recurse(char* path, char* expr)
+void recurse(char* path, char* expr, bool doFileSearch)
 {
     if (isFile(path)) 
     {
-        fileSearch(path, expr);
+        fileSearch(path, expr, doFileSearch);
         return;
     }
     char nextPath[MAX_BUFF];
@@ -97,7 +136,7 @@ void recurse(char* path, char* expr)
             strcat(nextPath, de->d_name);
             if (0 != strcmp(de->d_name,".") && (0 != strcmp(de->d_name,"..")) && 0 != strcmp(de->d_name,".git"))
             {
-                recurse(nextPath, expr);
+                recurse(nextPath, expr, doFileSearch);
             }
         }
     }
