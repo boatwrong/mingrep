@@ -8,3 +8,4 @@ opTest.c
 ./temp
 temp/*
 test/*
+extras/
